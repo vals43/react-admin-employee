@@ -58,16 +58,6 @@
       "managerId": 1
     },
     {
-      "id": 2,
-      "firstname": "Thomas",
-      "lastname": "Moreau",
-      "email": "thomas.moreau@company.com",
-      "department": "Marketing",
-      "remuneration": 0,
-      "isRemunerate": false,
-      "managerId": 2
-    },
-    {
       "id": 3,
       "firstname": "Sarah",
       "lastname": "Bernard",

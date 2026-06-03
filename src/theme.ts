@@ -178,6 +178,63 @@ export const darkTheme = {
         },
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundColor: "#121418",
+          border: "1px solid rgba(255,255,255,0.06)",
+          borderRadius: 3,
+          backgroundImage: "none",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.5)",
+        },
+      },
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: {
+          color: "#e8e8e4",
+          fontWeight: 700,
+          fontSize: "1.1rem",
+          letterSpacing: "-0.02em",
+          padding: "24px 24px 8px",
+        },
+      },
+    },
+    MuiDialogContent: {
+      styleOverrides: {
+        root: {
+          color: "#7a7a82",
+          fontSize: "0.85rem",
+          padding: "8px 24px 16px",
+        },
+      },
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: {
+          borderTop: "1px solid rgba(255,255,255,0.04)",
+          padding: "16px 24px",
+          gap: 8,
+        },
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: "#1e2128",
+          border: "1px solid rgba(255,255,255,0.06)",
+          color: "#e8e8e4",
+          fontSize: "0.75rem",
+          fontWeight: 500,
+          padding: "6px 10px",
+          borderRadius: 1.5,
+          boxShadow: "0 8px 24px rgba(0,0,0,0.3)",
+        },
+        arrow: {
+          color: "#1e2128",
+        },
+      },
+    },
     RaList: {
       styleOverrides: {
         root: {
