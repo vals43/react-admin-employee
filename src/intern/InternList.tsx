@@ -18,7 +18,7 @@ import {
   useRecordContext,
   TopToolbar,
 } from "react-admin";
-import { ConfirmDeleteButton } from "./ConfirmDeleteDialog";
+import { ConfirmDeleteButton } from "../ConfirmDeleteDialog";
 import {
   Button,
   Dialog,

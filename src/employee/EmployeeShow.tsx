@@ -1,6 +1,6 @@
 import { useRecordContext, Show, TopToolbar, ListButton, EditButton } from "react-admin";
 import { Card, CardContent, Typography, Box, Avatar, Chip, Grid } from "@mui/material";
-import { InternsByManager } from "./InternsByManager";
+import { InternsByManager } from "../intern/InternsByManager";
 import { DepartmentStats } from "./DepartmentStats";
 
 const EmployeeShowActions = () => (

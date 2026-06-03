@@ -13,7 +13,7 @@ import {
 import { Box, Typography, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { QuickStatusToggle } from "./QuickStatusToggle";
-import { ConfirmDeleteButton } from "./ConfirmDeleteDialog";
+import { ConfirmDeleteButton } from "../ConfirmDeleteDialog";
 
 const DeleteAction = () => {
   const record = useRecordContext();
