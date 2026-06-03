@@ -1,0 +1,41 @@
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: #0b0d11;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+}
+
+.MuiList-root a {
+  text-decoration: none;
+  color: #2aa8a8;
+}
+
+.MuiList-root a:hover {
+  text-decoration: underline;
+  color: #4acaca;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f1116;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #22252b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2a2d35;
+}

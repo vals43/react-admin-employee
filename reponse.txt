@@ -1,0 +1,84 @@
+﻿
+Exercice 1 — Configuration de l'application
+Question 1.1 : Que représente le dataProvider dans React-Admin ? Quel est son rôle ?
+Le dataProvider est l'adaptateur qui fait le lien entre React-Admin et l'API. React-Admin ne sait pas comment appeler une API : il ne connaît pas les URLs, le format des données ni les méthodes HTTP. Le dataProvider traduit les actions internes (getList, getOne, create, update, delete) en vraies requêtes HTTP.
+Par exemple, quand React-Admin veut afficher la liste des employés, il appelle dataProvider.getList("employees", ...). Le jsonServerProvider transforme cela en GET http://localhost:3002/employees.
+Sans dataProvider, React-Admin ne peut pas communiquer avec une API.
+
+Question 1.2 : Quelle requête HTTP est envoyée au chargement de la liste ?
+Dans l'onglet Network du navigateur, on observe : GET http://localhost:3002/employees?_sort=id&_order=ASC&_start=0&_end=5
+Les paramètres signifient : _sort=id&_order=ASC = tri par ID croissant, _start=0&_end=5 = pagination (les 5 premiers employés).
+
+Exercice 2 — Liste des employés
+Question 2.1 : Que fait la prop rowClick="edit" sur le Datagrid ?
+Quand l'utilisateur clique sur une ligne du tableau, React-Admin le redirige automatiquement vers la page de modification de cet employé. L'URL devient /employees/{id}/edit. Dans notre projet on utilise rowClick="show" à la place, ce qui redirige vers la page de détail.
+
+Question 2.2 : Passez perPage à 2. Que se passe-t-il dans l'interface ?
+Le tableau n'affiche plus que 2 employés par page. La barre de pagination en bas change et montre "1-2 sur 5". Des boutons Précédent / Suivant permettent de naviguer entre les pages. L'API est appelée avec _start=0&_end=2 puis _start=2&_end=4, etc.
+
+Exercice 3 — Création d'un employé
+Question 3.1 : Que se passe-t-il si vous soumettez le formulaire sans remplir le prénom ?
+Le formulaire ne se soumet pas. Un message d'erreur rouge s'affiche directement sous le champ vide : "Le prénom est obligatoire". La requête HTTP n'est jamais envoyée à l'API. C'est la validation côté client gérée par validate={[required(...)]}.
+
+Question 3.2 : Essayez de saisir un salaire de 500 euros. Que se passe-t-il ?
+Le formulaire bloque la soumission et affiche sous le champ salaire : "Le salaire minimum est 1 500 €". C'est la règle minValue(1500, ...) qui s'applique. Aucune requête n'est envoyée à l'API.
+
+Exercice 4 — Modification d'un employé
+Question 4.1 : Quelle méthode HTTP est utilisée lors de la sauvegarde d'une modification ?
+Dans l'onglet Network, on voit : PUT http://localhost:3002/employees/1. La méthode PUT remplace l'intégralité de l'enregistrement. React-Admin envoie tous les champs de l'employé dans le corps (body) de la requête.
+
+Question 4.2 : À quel moment useRecordContext() est-il disponible ? Que retourne-t-il si l'enregistrement n'est pas encore chargé ?
+useRecordContext() est disponible uniquement à l'intérieur d'un composant enfant d'un contexte d'enregistrement comme <Edit> ou <Show>. Si l'enregistrement n'est pas encore chargé, il retourne undefined. C'est pourquoi on vérifie toujours if (!record) avant d'accéder à ses propriétés.
+
+Exercice 5 — Fiche détail
+Question 5.1 : Quelle différence y a-t-il entre SimpleShowLayout et TabbedShowLayout ?
+SimpleShowLayout affiche tous les champs à la suite, de haut en bas. C'est idéal pour des fiches simples avec peu de champs. TabbedShowLayout organise les champs en onglets cliquables, idéal quand il y a beaucoup de champs à regrouper par catégorie. Il nécessite des composants <Tab> enfants pour définir chaque onglet.
+
+Exercice 6 — InternList
+Question 6.1 : ReferenceField génère quel appel HTTP pour résoudre le manager ?
+ReferenceField déclenche une requête GET http://localhost:3002/employees/{id} pour chaque managerId unique présent dans la liste des stagiaires. Dans l'onglet Network du navigateur, on voit par exemple GET http://localhost:3002/employees/1, GET http://localhost:3002/employees/2, etc. React-Admin regroupe automatiquement les appels (getMany) pour éviter les requêtes redondantes.
+
+Question 6.2 : Que se passe-t-il visuellement si managerId ne correspond à aucun employé ?
+ReferenceField n'affiche rien (vide) pour la cellule concernée. Aucune erreur n'est levée : le champ absent produit simplement un rendu vide. On peut améliorer l'expérience en utilisant une prop emptyText pour afficher un message comme "Manager inconnu".
+
+Exercice 7 — InternCreate & InternEdit
+Question 7.1 : Quelle méthode HTTP est émise lors de la soumission de InternCreate ?
+La soumission du formulaire de création émet une requête POST http://localhost:3002/interns. React-Admin envoie toutes les données du formulaire dans le corps (body) de la requête au format JSON.
+
+Question 7.2 : Quel hook utilisez-vous pour la validation conditionnelle de remuneration, et pourquoi ?
+On utilise useWatch de react-hook-form (intégré dans React-Admin via les composants SimpleForm). useWatch permet d'observer en temps réel la valeur du champ isRemunerate. Si la case est cochée (true), on ajoute la règle required() sur remuneration ; si elle est décochée (false), on retire la validation. C'est le seul hook natif qui réagit aux changements du formulaire sans provoquer de re-render global.
+
+Exercice 8 — InternShow & ManagerCard
+Question 8.1 : Quelle est la différence entre useGetOne et ReferenceField ?
+ReferenceField est un composant déclaratif qui affiche une valeur liée par clé étrangère. Il est simple d'utilisation mais ne permet pas de gérer finement les états intermédiaires. useGetOne est un hook de bas niveau qui autorise un contrôle total : gestion explicite de isPending, error et data, possibilité d'afficher des composants personnalisés (Loader, Alert, etc.). On préfère useGetOne dans un composant custom comme ManagerCard car on veut gérer proprement les 3 états.
+
+Question 8.2 : Que se passe-t-il si useGetOne reçoit id: undefined sans l'option enabled ?
+React-Admin envoie une requête GET http://localhost:3002/employees/undefined (ou une requête invalide). Le paramètre enabled: false empêche l'exécution de la requête tant que l'id est défini. On utilise enabled: !!record.managerId pour garantir que la requête ne part qu'avec un id valide.
+
+Exercice 9 — Enrichissement EmployeeShow
+Question 9.1 : Différence entre useGetList et ReferenceManyField ?
+ReferenceManyField est utilisé dans un contexte de ressource existante pour afficher les enregistrements liés par une clé étrangère inversée. useGetList est plus flexible : on peut l'utiliser n'importe où, filtrer avec n'importe quel critère (pas seulement la clé étrangère), et récupérer des données sur n'importe quelle ressource. useGetList est indispensable quand on veut faire une requête personnalisée qui ne correspond pas à une simple relation "many".
+
+Question 9.2 : Comment optimiser la requête de DepartmentStats pour ne récupérer que le total sans charger tous les employés ?
+On utilise pagination: { page: 1, perPage: 1 } dans les paramètres de useGetList. Malgré perPage=1, la propriété total retournée par le dataProvider contient le nombre total d'enregistrements correspondant au filtre. Cela évite de charger inutilement des centaines d'enregistrements alors qu'on ne veut que le compteur. L'API reçoit _start=0&_end=1, mais json-server renvoie le header X-Total-Count avec le vrai total.
+
+Exercice 10 — QuickStatusToggle
+Question 10.1 : Quelle méthode HTTP useUpdate utilise-t-il par défaut ?
+useUpdate utilise PUT par défaut, ce qui remplace l'intégralité de l'enregistrement. Pour forcer PATCH (mise à jour partielle), il faut passer le paramètre mutationMode: 'pessimistic' et configurer le dataProvider pour supporter PATCH, ou bien utiliser directement une mutation personnalisée avec fetch.
+
+Question 10.2 : Pourquoi previousData est-il nécessaire ?
+previousData permet à React-Admin de gérer l'optimistic rendering et l'annulation (undo). Si on omet previousData, React-Admin ne peut pas restaurer les données précédentes en cas d'erreur réseau ou d'annulation utilisateur. Le composant perd la capacité de "revenir en arrière" et l'affichage peut se désynchroniser.
+
+Exercice 11 — useCreate & Formulaire rapide
+Question 11.1 : Quelle différence entre utiliser useCreate dans un composant custom et utiliser le composant <Create> de React-Admin ?
+<Create> est un composant déclaratif haut niveau qui intègre automatiquement le formulaire, la validation, la redirection et les notifications. useCreate est un hook bas niveau qui donne un contrôle total sur le moment et les données de la création. On utilise useCreate dans une modale pour créer une entrée sans quitter la page courante, ce qui n'est pas possible avec <Create> qui navigue vers une nouvelle route.
+
+Question 11.2 : Comment gérez-vous le rechargement de la liste après une création réussie via useCreate ?
+On utilise le hook useRefresh() qui force le rechargement de la liste courante. On appelle refresh() dans le callback onSuccess de useCreate, juste après avoir fermé la modale. React-Admin déclenche alors un nouveau getList pour mettre à jour les données affichées.
+
+Exercice 12 — Dashboard
+Question 12.1 : Les 4 appels useGetList se font-ils en parallèle ou en séquence ?
+Ils se font en parallèle. Chaque useGetList est un hook React indépendant ; React exécute tous les hooks au même niveau au moment du rendu du composant. Les 4 requêtes HTTP (GET /employees?perPage=1, GET /employees?active=true&perPage=1, GET /interns?perPage=1, GET /interns?isRemunerate=true&perPage=1) sont donc lancées simultanément, ce qui optimise le temps de chargement du dashboard.
+
+Question 12.2 : Pourquoi perPage: 1 est préférable à perPage: 100 ici ?
+Avec perPage: 1, on ne récupère qu'un seul enregistrement par requête tout en ayant accès à la propriété total (via X-Total-Count) qui contient le décompte complet. Avec perPage: 100, on télécharge inutilement 100 enregistrements complets (tous les champs) alors qu'on ne veut qu'un simple compteur. Cela réduit la bande passante, accélère le chargement et évite de surcharger l'API.

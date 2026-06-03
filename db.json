@@ -1,0 +1,101 @@
+{
+  "employees": [
+    {
+      "id": 1,
+      "firstname": "Alice",
+      "lastname": "Martin",
+      "email": "alice@company.com",
+      "department": "Informatique",
+      "salary": 2800,
+      "active": true
+    },
+    {
+      "id": 2,
+      "firstname": "Bob",
+      "lastname": "Dupont",
+      "email": "bob@company.com",
+      "department": "Marketing",
+      "salary": 2500,
+      "active": true
+    },
+    {
+      "id": 3,
+      "firstname": "Clara",
+      "lastname": "Nguyen",
+      "email": "clara@company.com",
+      "department": "RH",
+      "salary": 2600,
+      "active": false
+    },
+    {
+      "id": 4,
+      "firstname": "David",
+      "lastname": "Leroy",
+      "email": "david@company.com",
+      "department": "Finance",
+      "salary": 3100,
+      "active": true
+    },
+    {
+      "id": 5,
+      "firstname": "Emma",
+      "lastname": "Petit",
+      "email": "emma@company.com",
+      "department": "Informatique",
+      "salary": 2950,
+      "active": true
+    }
+  ],
+  "interns": [
+    {
+      "id": 1,
+      "firstname": "Léa",
+      "lastname": "Dubois",
+      "email": "lea.dubois@company.com",
+      "department": "Informatique",
+      "remuneration": 1200,
+      "isRemunerate": true,
+      "managerId": 1
+    },
+    {
+      "id": 2,
+      "firstname": "Thomas",
+      "lastname": "Moreau",
+      "email": "thomas.moreau@company.com",
+      "department": "Marketing",
+      "remuneration": 0,
+      "isRemunerate": false,
+      "managerId": 2
+    },
+    {
+      "id": 3,
+      "firstname": "Sarah",
+      "lastname": "Bernard",
+      "email": "sarah.bernard@company.com",
+      "department": "Finance",
+      "remuneration": 1300,
+      "isRemunerate": true,
+      "managerId": 4
+    },
+    {
+      "id": 4,
+      "firstname": "Lucas",
+      "lastname": "Petit",
+      "email": "lucas.petit@company.com",
+      "department": "Informatique",
+      "remuneration": 1100,
+      "isRemunerate": true,
+      "managerId": 5
+    },
+    {
+      "id": 5,
+      "firstname": "Marie",
+      "lastname": "Durand",
+      "email": "marie.durand@company.com",
+      "department": "Informatique",
+      "remuneration": 0,
+      "isRemunerate": false,
+      "managerId": 1
+    }
+  ]
+}
