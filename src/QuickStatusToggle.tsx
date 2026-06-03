@@ -12,7 +12,7 @@ export const QuickStatusToggle = () => {
       "employees",
       {
         id: record.id,
-        data: { active: !record.active },
+        data: { ...record, active: !record.active },
         previousData: record,
       },
       {

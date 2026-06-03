@@ -128,9 +128,31 @@ export const darkTheme = {
     MuiMenuItem: {
       styleOverrides: {
         root: {
+          borderRadius: 8,
+          margin: "2px 8px",
+          padding: "8px 12px",
+          transition: "all 0.15s ease",
           "&:hover": {
-            backgroundColor: "#1e2128",
+            backgroundColor: "rgba(255,255,255,0.04)",
           },
+          "&.Mui-selected": {
+            backgroundColor: "rgba(42,168,168,0.1)",
+            "&:hover": {
+              backgroundColor: "rgba(42,168,168,0.15)",
+            },
+            "& .MuiListItemIcon-root": {
+              color: "#2aa8a8",
+            },
+          },
+        },
+      },
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          color: "#5a5a62",
+          minWidth: 36,
+          transition: "color 0.15s ease",
         },
       },
     },

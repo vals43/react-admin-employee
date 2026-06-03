@@ -1,80 +1,106 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
-const COLORS = ["#2aa8a8", "#22252b"];
-
-const CustomLabel = ({ cx, cy }) => (
-  <text x={cx} y={cy} textAnchor="middle" dominantBaseline="central">
-    <tspan x={cx} dy="-4" fill="#e4e4e0" fontSize="28" fontWeight="600">
-      100%
-    </tspan>
-  </text>
-);
+const COLORS = ["#2aa8a8", "rgba(255,255,255,0.06)"];
 
 export const ActivityDonut = ({ active, inactive }) => {
   const total = active + inactive;
-  const activePct = total > 0 ? Math.round((active / total) * 100) : 0;
+  const pct = total > 0 ? Math.round((active / total) * 100) : 0;
   const data = [
     { name: "Actifs", value: active },
-    { name: "Inactifs", value: inactive },
+    { name: "Inactifs", value: inactive || 1 },
   ];
 
   return (
-    <Card
+    <Box
       sx={{
-        borderRadius: 3,
-        border: "1px solid #22252b",
-        backgroundColor: "#16181d",
-        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: 240,
       }}
     >
-      <CardContent sx={{ p: 3, "&:last-child": { pb: 3 } }}>
-        <Typography
-          variant="body2"
+      <Box sx={{ width: 140, height: 140, position: "relative", mb: 2, flexShrink: 0 }}>
+        <ResponsiveContainer>
+          <PieChart>
+            <defs>
+              <radialGradient id="donutGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#2aa8a8" stopOpacity={0.08} />
+                <stop offset="100%" stopColor="#2aa8a8" stopOpacity={0} />
+              </radialGradient>
+            </defs>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={42}
+              outerRadius={64}
+              startAngle={90}
+              endAngle={-270}
+              dataKey="value"
+              stroke="none"
+              cornerRadius={4}
+              paddingAngle={2}
+            >
+              {data.map((_, i) => (
+                <Cell key={i} fill={COLORS[i]} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+        <Box
           sx={{
-            mb: 2,
-            fontWeight: 500,
-            textTransform: "uppercase",
-            letterSpacing: "0.04em",
-            color: "#888890",
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            pointerEvents: "none",
           }}
         >
-          Taux d'activité
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Box sx={{ width: 140, height: 140, flexShrink: 0 }}>
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie
-                  data={data}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={38}
-                  outerRadius={62}
-                  startAngle={90}
-                  endAngle={-270}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {data.map((_, i) => (
-                    <Cell key={i} fill={COLORS[i]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </Box>
-          <Box>
-            <Typography
-              sx={{ fontSize: "2.5rem", fontWeight: 600, lineHeight: 1, color: "#e4e4e0", letterSpacing: "-0.02em" }}
-            >
-              {activePct}%
-            </Typography>
-            <Typography variant="body2" sx={{ color: "#888890", mt: 0.5 }}>
-              {active} actif{active > 1 ? "s" : ""} sur {total}
-            </Typography>
-          </Box>
+          <Typography
+            sx={{
+              fontSize: "2rem",
+              fontWeight: 700,
+              letterSpacing: "-0.03em",
+              color: "#e8e8e4",
+              fontVariantNumeric: "tabular-nums",
+            }}
+          >
+            {pct}%
+          </Typography>
         </Box>
-      </CardContent>
-    </Card>
+      </Box>
+      <Box sx={{ display: "flex", gap: 2.5 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+          <Box
+            sx={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              backgroundColor: "#2aa8a8",
+              boxShadow: "0 0 6px rgba(42,168,168,0.4)",
+            }}
+          />
+          <Typography variant="body2" sx={{ color: "#8a8a92", fontSize: "0.75rem" }}>
+            {active} actif{active > 1 ? "s" : ""}
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
+          <Box
+            sx={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              backgroundColor: "rgba(255,255,255,0.12)",
+            }}
+          />
+          <Typography variant="body2" sx={{ color: "#8a8a92", fontSize: "0.75rem" }}>
+            {inactive} inactif{inactive > 1 ? "s" : ""}
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
   );
 };
